@@ -34,12 +34,15 @@ public class Day4
         var (numbers, boards) = ReadInputFile("Inputs/input4.txt");
         BingoGame game = new BingoGame(numbers, boards);
 
-        return game.Play();
+        return game.GetFirstWinning();
     }
 
     public static long Sol2()
     {
-        return 0;
+        var (numbers, boards) = ReadInputFile("Inputs/input4.txt");
+        BingoGame game = new BingoGame(numbers, boards);
+
+        return game.GetLastWinning();
     }
 }
 
@@ -58,7 +61,7 @@ public class BingoGame
 
     public bool PlayRound(int value)
     {
-        var winningBoards = Boards.Where(x => x.PlayRound(value));
+        var winningBoards = Boards.Where(x => x.PlayRound(value)).ToList();
         if (winningBoards.Any())
         {
             WinningBoard = winningBoards.First();
@@ -67,7 +70,7 @@ public class BingoGame
         return false;
     }
 
-    public long Play()
+    public long GetFirstWinning()
     {
         foreach (var number in Numbers)
         {
@@ -77,6 +80,19 @@ public class BingoGame
             };
         }
         return 0;
+    }
+    public long GetLastWinning()
+    {
+        foreach (var number in Numbers)
+        {
+            if (Boards.Where(x => !x.IsComplete).Any())
+            {
+                PlayRound(number);
+            }else{
+                break;
+            }
+        }
+        return WinningBoard.Score;
     }
 }
 public class BingoBoard
@@ -118,10 +134,13 @@ public class BingoBoard
 
     public bool PlayRound(int number)
     {
-        if (CheckNumber(number))
+        if (!IsComplete)
         {
-            CheckForWin(number);
-            return IsComplete;
+            if (CheckNumber(number))
+            {
+                CheckForWin(number);
+                return IsComplete;
+            }
         }
         return false;
     }
