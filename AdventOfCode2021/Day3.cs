@@ -7,7 +7,6 @@ public class Day3
         return System.IO.File.ReadAllLines(filename);
     }
 
-
     public static long Sol1()
     {
         var lines = ReadInputFile("Inputs/input3.txt");

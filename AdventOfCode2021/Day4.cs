@@ -2,7 +2,6 @@ using System.Drawing;
 
 public class Day4
 {
-    //Read a file line by line 
     public static (List<int>, List<BingoBoard>) ReadInputFile(string filename)
     {
         List<BingoBoard> boards = new List<BingoBoard>();
