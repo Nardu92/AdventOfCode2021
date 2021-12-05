@@ -17,20 +17,22 @@ public class Day5
         var maxY = Math.Max(segments.Max(x => x.EndPoint.Y), segments.Max(x => x.StartPoint.Y));
         var ventPlot = new VentPlot(new Point(maxX, maxY), segments);
         ventPlot.PlotVents();
-        //ventPlot.ToConsole();
-        
         return ventPlot.Count(2);
     }
 
     public static long Sol2()
     {
-        return 0;
+        var segments = ReadInputFile("Inputs/input5.txt");
+        var maxX = Math.Max(segments.Max(x => x.EndPoint.X), segments.Max(x => x.StartPoint.X));
+        var maxY = Math.Max(segments.Max(x => x.EndPoint.Y), segments.Max(x => x.StartPoint.Y));
+        var ventPlot = new VentPlot(new Point(maxX, maxY), segments);
+        ventPlot.PlotVents();
+        return ventPlot.Count(2);
     }
 }
 
 public class VentPlot
 {
-
     public List<VentSegment> Segments { get; set; }
 
     public int[,] Grid { get; set; }
@@ -47,35 +49,32 @@ public class VentPlot
         {
             if (segment.IsVertical)
             {
-                if (segment.StartPoint.Y < segment.EndPoint.Y)
+                for (int i = segment.StartPoint.Y; i <= segment.EndPoint.Y; i++)
                 {
-                    for (int i = segment.StartPoint.Y; i <= segment.EndPoint.Y; i++)
-                    {
-                        Grid[i, segment.StartPoint.X]++;
-                    }
-                }
-                else
-                {
-                    for (int i = segment.EndPoint.Y; i <= segment.StartPoint.Y; i++)
-                    {
-                        Grid[i, segment.StartPoint.X]++;
-                    }
+                    Grid[i, segment.StartPoint.X]++;
                 }
             }
             else if (segment.IsHorizontal)
             {
-                if (segment.StartPoint.X < segment.EndPoint.X)
+                for (int i = segment.StartPoint.X; i <= segment.EndPoint.X; i++)
                 {
-                    for (int i = segment.StartPoint.X; i <= segment.EndPoint.X; i++)
+                    Grid[segment.StartPoint.Y, i]++;
+                }
+            }
+            else
+            {
+                if (segment.StartPoint.Y < segment.EndPoint.Y)
+                {
+                    for (int i = 0; i <= segment.EndPoint.Y - segment.StartPoint.Y; i++)
                     {
-                        Grid[segment.StartPoint.Y, i]++;
+                        Grid[segment.StartPoint.Y + i, segment.StartPoint.X + i]++;
                     }
                 }
                 else
                 {
-                    for (int i = segment.EndPoint.X; i <= segment.StartPoint.X; i++)
+                    for (int i = 0; i <= segment.StartPoint.Y - segment.EndPoint.Y; i++)
                     {
-                        Grid[segment.StartPoint.Y, i]++;
+                        Grid[segment.StartPoint.Y - i, segment.StartPoint.X + i]++;
                     }
                 }
             }
@@ -97,17 +96,6 @@ public class VentPlot
         }
         return count;
     }
-    public void ToConsole()
-    {
-        for (int i = 0; i < Grid.GetLength(0); i++)
-        {
-            for (int j = 0; j < Grid.GetLength(1); j++)
-            {
-                Console.Write($"{Grid[i, j]} ");
-            }
-            Console.WriteLine();
-        }
-    }
 }
 
 public class VentSegment
@@ -122,8 +110,41 @@ public class VentSegment
 
         var scoordEnd = endPoint.Split(',');
         EndPoint = new Point(Convert.ToInt32(scoordEnd[0]), Convert.ToInt32(scoordEnd[1]));
+        NormalizeSegment();
     }
 
     public bool IsVertical => this.StartPoint.X == this.EndPoint.X;
     public bool IsHorizontal => this.StartPoint.Y == this.EndPoint.Y;
+
+    private void NormalizeSegment()
+    {
+        if (IsVertical)
+        {
+            if (StartPoint.Y > EndPoint.Y)
+            {
+                SwapPoints();
+            }
+        }
+        else if (IsHorizontal)
+        {
+            if (StartPoint.X > EndPoint.X)
+            {
+                SwapPoints();
+            }
+        }
+        else
+        {
+            if ((StartPoint.X > EndPoint.X && StartPoint.Y > EndPoint.Y) ||
+                (StartPoint.X > EndPoint.X && StartPoint.Y < EndPoint.Y))
+            {
+                SwapPoints();
+            }
+        }
+    }
+    private void SwapPoints()
+    {
+        var temp = StartPoint;
+        StartPoint = EndPoint;
+        EndPoint = temp;
+    }
 }
