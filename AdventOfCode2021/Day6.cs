@@ -1,5 +1,6 @@
 public class Day6
 {
+
     public static List<int> ReadInputFile(string filename)
     {
         using System.IO.StreamReader file = new System.IO.StreamReader(filename);
@@ -7,90 +8,59 @@ public class Day6
         return line.Split(',').Select(int.Parse).ToList();
     }
 
-    public static int Sol1()
+    public static long Sol1()
     {
         var input = ReadInputFile("Inputs\\input6.txt").ToArray();
-        var fish = input.Select(x => new LanternFish(x)).ToList();
-
-        for (int i = 0; i < 80; i++)
-        {
-            var newFish = new List<LanternFish>();
-            foreach (var f in fish)
-            {
-                if (f.Grow())
-                {
-                    newFish.Add(new LanternFish(8));
-                }
-            }
-            fish.AddRange(newFish);
-        }
-        return fish.Count();
+        return CountAllTheFish(input, 80);
     }
 
     public static long Sol2()
     {
-        var input = ReadInputFile("Inputs\\input6e.txt").ToArray();
-
-        const int maxAge = 6;
-
-        for (int i = 0; i < 10; i++)
-        {
-            int size = i + maxAge;
-            Console.WriteLine($"D: {i} f: {FibonacciRulez(input, maxAge, size)}");
-        }
-        return 0;
+        var input = ReadInputFile("Inputs\\input6.txt").ToArray();
+        return CountAllTheFish(input, 256);
     }
 
-    private static long FibonacciRulez(int[] input, int maxAge, int size)
+    private static long CountAllTheFish(int[] input, int days)
     {
-        var days = new int[size + 2];
-        var daysLong = new int[size];
-        for (int i = 0; i < size; i++)
+        FishSchool[] schools = new FishSchool[days];
+        for (int i = 0; i < days; i++)
         {
-            days[i] = 0;
-            daysLong[i] = 0;
+            schools[i] = new FishSchool();
         }
         foreach (var i in input)
         {
-            days[maxAge - i]++;
-        }
-        for (int j = maxAge + 1; j < size; j++)
-        {
-            for (int i = maxAge; i < size; i++)
+            if (i < days)
             {
-                var x = days[i - maxAge];
-                daysLong[i] += x;
+                schools[i].AdultsCount++;
+                schools[i].YoungCount++;
             }
-            for (int i = maxAge; i < size; i++)
+        }
+        for (int i = 0; i < days; i++)
+        {
+            var adults = schools[i].AdultsCount;
+            if (adults > 0)
             {
-                days[i+2] += daysLong[i];
+                for (int j = i + 7; j < days; j += 7)
+                {
+                    schools[j].YoungCount += adults;
+                }
+            }
+            if (i + 2 < days)
+            {
+                if (schools[i].YoungCount > 0)
+                {
+                    schools[i + 2].AdultsCount += schools[i].YoungCount;
+                    schools[i].YoungCount = 0;
+                }
             }
         }
 
-        return days.Sum();
+        return schools.Sum(x => x.AdultsCount + x.YoungCount);
     }
 }
 
-public class LanternFish
+public class FishSchool
 {
-    public int Age { get; set; }
-
-    public LanternFish(int age)
-    {
-        Age = age;
-    }
-
-    public bool Grow()
-    {
-        if (Age == 0)
-        {
-            Age = 6;
-            return true;
-        }
-        else
-        {
-            Age--;
-            return false;
-        }
-    }
+    public long AdultsCount { get; set; }
+    public long YoungCount { get; set; }
 }
