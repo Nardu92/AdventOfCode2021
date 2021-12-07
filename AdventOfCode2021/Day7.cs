@@ -4,8 +4,7 @@ public class Day7
     public static List<int> ReadInputFile(string filename)
     {
         using System.IO.StreamReader file = new System.IO.StreamReader(filename);
-        string line = file.ReadLine();
-        return line.Split(',').Select(int.Parse).ToList();
+        return file.ReadLine()!.Split(',').Select(int.Parse).ToList();
     }
 
     public static long Sol1()

@@ -8,12 +8,12 @@ public class Day4
         using System.IO.StreamReader file = new System.IO.StreamReader(filename);
         string line;
 
-        var numbers = file.ReadLine().Split(',').Select(x => Convert.ToInt32(x)).ToList();
+        var numbers = file.ReadLine()!.Split(',').Select(x => Convert.ToInt32(x)).ToList();
 
         do
         {
             List<List<string>> listOfLinesForBoard = new List<List<string>>();
-            while ((line = file.ReadLine()) != null && line != string.Empty)
+            while ((line = file.ReadLine()!) != null && line != string.Empty)
             {
                 listOfLinesForBoard.Add(line.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList());
             }
@@ -50,7 +50,7 @@ public class BingoGame
     public List<BingoBoard> Boards { get; private set; }
     public List<int> Numbers { get; private set; }
 
-    public BingoBoard WinningBoard { get; private set; }
+    public BingoBoard? WinningBoard { get; private set; }
 
     public BingoGame(List<int> numbers, List<BingoBoard> boards)
     {
@@ -75,7 +75,7 @@ public class BingoGame
         {
             if (PlayRound(number))
             {
-                return WinningBoard.Score;
+                return WinningBoard!.Score;
             };
         }
         return 0;
@@ -91,7 +91,7 @@ public class BingoGame
                 break;
             }
         }
-        return WinningBoard.Score;
+        return WinningBoard!.Score;
     }
 }
 public class BingoBoard
