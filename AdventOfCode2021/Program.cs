@@ -15,3 +15,5 @@ Console.WriteLine($"Day7 - 1 {Day7.Sol1()}");
 Console.WriteLine($"Day7 - 2 {Day7.Sol2()}");
 Console.WriteLine($"Day8 - 1 {Day8.Sol1()}");
 Console.WriteLine($"Day8 - 2 {Day8.Sol2()}");
+Console.WriteLine($"Day9 - 1 {Day9.Sol1()}");
+Console.WriteLine($"Day9 - 2 {Day9.Sol2()}");
