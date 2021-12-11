@@ -11,13 +11,13 @@ public class Day1
         return input.Skip(1).Where((x, idx) => x > input[idx]).Count();
     }
 
-    public static int Sol1()
+    public static long Sol1()
     {
         var input = ReadInputFile("Inputs\\input1.txt").ToArray();
         return CountIncreasing(input);
     }
 
-    public static int Sol2(){
+    public static long Sol2(){
         var input = ReadInputFile("Inputs\\input1.txt").ToArray();
         
         var result = input.Zip(input.Skip(1), (first, second) => first + second);
