@@ -35,18 +35,24 @@ public class Day12
             return possibleNextSteps;
         }
 
-        public long Explore(HashSet<string> visitedNodes)
+        public List<string> Explore(HashSet<string> visitedNodes, string allowedDoubleSmall, bool doubleVisit, string pathSoFar)
         {
+            if (Value == allowedDoubleSmall && doubleVisit)
+            {
+                doubleVisit = false;
+                visitedNodes.Remove(Value);
+            }
             var possibleSteps = GetPossibleNextSteps(visitedNodes);
             if (possibleSteps.Count == 0)
             {
-                return 0;
+                return new List<string>();
             }
-            long total = 0;
+            var paths = new List<string>();
             if (possibleSteps.ContainsKey("end"))
             {
+
                 possibleSteps.Remove("end");
-                total++;
+                paths.Add(pathSoFar + ",end");
             }
             foreach (var node in possibleSteps.Values)
             {
@@ -55,10 +61,11 @@ public class Day12
                 {
                     newVisited.Add(node.Value);
                 }
-                total += node.Explore(newVisited);
+                paths.AddRange(node.Explore(newVisited, allowedDoubleSmall, doubleVisit, pathSoFar + "," + node.Value));
             }
-            return total;
+            return paths;
         }
+
     }
 
     private static Dictionary<string, Node> ReadInputFile(string filename)
@@ -89,16 +96,32 @@ public class Day12
 
     public static long Sol1()
     {
-        var nodesById = ReadInputFile("Inputs/input12.txt");
+        var nodesById = ReadInputFile("Inputs/input12e2.txt");
         Node startNode = nodesById["start"];
         var visitedNodes = new HashSet<string>();
         visitedNodes.Add(startNode.Value);
-        return startNode.Explore(visitedNodes);
+        return startNode.Explore(visitedNodes, "", false, "start").Count;
     }
 
     public static long Sol2()
     {
-        return 0;
+        var nodesById = ReadInputFile("Inputs/input12.txt");
+        Node startNode = nodesById["start"];
+        var visitedNodes = new HashSet<string>();
+        visitedNodes.Add(startNode.Value);
+
+        var paths = new HashSet<string>();
+
+        foreach (var nodekv in nodesById)
+        {
+            if (nodekv.Value.Big || nodekv.Key == "start")
+            {
+                continue;
+            }
+            paths.UnionWith(startNode.Explore(visitedNodes, nodekv.Key, true, "start"));
+        }
+        paths.UnionWith(startNode.Explore(visitedNodes, "", false, "start"));
+        return paths.Count;
     }
 
 
