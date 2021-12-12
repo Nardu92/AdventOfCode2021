@@ -100,7 +100,7 @@ public class Day12
         Node startNode = nodesById["start"];
         var visitedNodes = new HashSet<string>();
         visitedNodes.Add(startNode.Value);
-        return startNode.Explore(visitedNodes, "", false, "start").Count;
+        return startNode.Explore(visitedNodes, "", false, startNode.Value).Count;
     }
 
     public static long Sol2()
@@ -114,13 +114,13 @@ public class Day12
 
         foreach (var nodekv in nodesById)
         {
-            if (nodekv.Value.Big || nodekv.Key == "start")
+            if (nodekv.Value.Big || nodekv.Key == startNode.Value)
             {
                 continue;
             }
-            paths.UnionWith(startNode.Explore(visitedNodes, nodekv.Key, true, "start"));
+            paths.UnionWith(startNode.Explore(visitedNodes, nodekv.Key, true, startNode.Value));
         }
-        paths.UnionWith(startNode.Explore(visitedNodes, "", false, "start"));
+        paths.UnionWith(startNode.Explore(visitedNodes, "", false, startNode.Value));
         return paths.Count;
     }
 
