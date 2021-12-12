@@ -96,7 +96,7 @@ public class Day12
 
     public static long Sol1()
     {
-        var nodesById = ReadInputFile("Inputs/input12e2.txt");
+        var nodesById = ReadInputFile("Inputs/input12.txt");
         Node startNode = nodesById["start"];
         var visitedNodes = new HashSet<string>();
         visitedNodes.Add(startNode.Value);
