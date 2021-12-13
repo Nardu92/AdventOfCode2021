@@ -26,6 +26,8 @@ Run("Day11- 1", Day11.Sol1);
 Run("Day11- 2", Day11.Sol2);
 Run("Day12- 1", Day12.Sol1);
 Run("Day12- 2", Day12.Sol2);
+Run("Day13- 1", Day13.Sol1);
+Run("Day13- 2", Day13.Sol2);
 
 static void Run(string name, Func<long> sol){
     var stopWatch = new Stopwatch();
