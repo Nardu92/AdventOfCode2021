@@ -110,7 +110,7 @@ public class Day13
         }
         CountElementsInMatrix(input.Grid);
 
-        PrintMatrix(input.Grid);
+        //PrintMatrix(input.Grid);
         return 0;
     }
 
