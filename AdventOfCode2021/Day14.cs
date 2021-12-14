@@ -50,44 +50,33 @@ public class Day14
 
     public static long Sol2()
     {
-        var input = ReadInputFile("Inputs/input14e.txt");
-        var countByMatch = new Dictionary<string, long>();
-        for (int i = 0; i < input.Template.Length - 1; i++)
+        var (template, rules) = ReadInputFile("Inputs/input14.txt");
+        var countByPair = new Dictionary<string, long>();
+        for (int i = 0; i < template.Length - 1; i++)
         {
-            var match = input.Template[i..(i + 2)];
-            countByMatch[match] = countByMatch.GetValueOrDefault(match, 0) + 1;
+            var pair = template[i..(i + 2)];
+            countByPair[pair] = countByPair.GetValueOrDefault(pair, 0) + 1;
         }
 
-        for (int step = 0; step < 10; step++)
+        for (int step = 0; step < 40; step++)
         {
-            var newCountByMatch = countByMatch.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-            foreach (var (match, amount) in countByMatch)
+            var newCountByPair = new Dictionary<string, long>();
+            foreach (var (pair, count) in countByPair)
             {
-                if (input.InsertionRules.TryGetValue(match, out char replacement))
-                {
-                    var a = match[0];
-                    var b = match[1];
-
-                    string newPair1 = a + replacement.ToString();
-                    string newPair2 = replacement.ToString() + b;
-                    newCountByMatch.Remove(match);
-                    newCountByMatch[newPair1] = countByMatch.GetValueOrDefault(newPair1, 0) + amount;
-                    newCountByMatch[newPair2] = countByMatch.GetValueOrDefault(newPair2, 0) + amount;
-                }
+                var replacement = rules[pair];
+                var newPair1 = pair[0] + replacement.ToString();
+                var newPair2 = replacement.ToString() + pair[1];
+                newCountByPair[newPair1] = newCountByPair.GetValueOrDefault(newPair1, 0) + count;
+                newCountByPair[newPair2] = newCountByPair.GetValueOrDefault(newPair2, 0) + count;
             }
-            countByMatch = newCountByMatch;
+            countByPair = newCountByPair;
         }
-        var charByCount = new Dictionary<char, long>();
-        foreach (var (match, amount) in countByMatch)
+        var finalCount = new Dictionary<char, long>();
+        foreach (var (pair, count) in countByPair)
         {
-            var a = match[0];
-            var b = match[1];
-            charByCount[a] = charByCount.GetValueOrDefault(a, 0) + amount;
-            charByCount[b] = charByCount.GetValueOrDefault(b, 0) + amount;
+            finalCount[pair[0]] = finalCount.GetValueOrDefault(pair[0], 0) + count;
         }
-        var min = charByCount.Values.Min();
-        var max = charByCount.Values.Max();
-        return 0;
+        finalCount[template[^1]] = finalCount.GetValueOrDefault(template[^1], 0) + 1;
+        return finalCount.Values.Max() - finalCount.Values.Min();
     }
 }
