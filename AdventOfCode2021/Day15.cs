@@ -18,6 +18,11 @@ public class Day15
     public static long Sol1()
     {
         var grid = ReadInputFile("Inputs\\input15.txt");
+        return GetDistanceToEnd(grid);
+    }
+
+    private static long GetDistanceToEnd(int[,] grid)
+    {
         var nodesByPosition = BuildGraph(grid);
 
         var visited = new HashSet<(int, int)>();
@@ -28,9 +33,9 @@ public class Day15
         var currentPosition = startPosition;
 
         var currentNode = nodesByPosition[currentPosition];
+        var unvisitedPositionsWithDistance = new Dictionary<(int, int), int>();
         do
         {
-
             foreach (var neighbor in currentNode.Neighbors)
             {
                 if (visited.Contains(neighbor.Location))
@@ -42,12 +47,22 @@ public class Day15
                 if (newDistance < oldDistance)
                 {
                     tentativeDistanceByPosition[neighbor.Location] = newDistance;
+                    unvisitedPositionsWithDistance[neighbor.Location] = newDistance;
                 }
-
             }
             visited.Add(currentNode.Location);
-            var nextPosition = tentativeDistanceByPosition.Where(x => !visited.Contains(x.Key)).OrderBy(x => x.Value).First().Key;
-            currentNode = nodesByPosition[nextPosition];
+
+            int min = int.MaxValue;
+            foreach (var (p, d) in unvisitedPositionsWithDistance)
+            {
+                if (d < min)
+                {
+                    min = d;
+                    currentPosition = p;
+                }
+            }
+            unvisitedPositionsWithDistance.Remove(currentPosition);
+            currentNode = nodesByPosition[currentPosition];
         } while (currentNode.Location != endPosition);
 
         return tentativeDistanceByPosition[endPosition];
@@ -95,9 +110,44 @@ public class Day15
 
     public static long Sol2()
     {
-        
-
-        return 0;
+        var grid = ReadInputFile("Inputs\\input15.txt");
+        var finalGrid = BuildMegaGrid(grid);
+        return GetDistanceToEnd(finalGrid);
     }
 
+    private static int[,] BuildMegaGrid(int[,] grid)
+    {
+        var grids = new Dictionary<(int y, int x), int[,]>();
+        grids.Add((0, 0), grid);
+        for (int y = 0; y < 5; y++)
+        {
+            for (int x = 0; x < 5; x++)
+            {
+                if (x == 0 && y == 0)
+                {
+                    continue;
+                }
+                var newGrid = new int[grid.GetLength(0), grid.GetLength(1)];
+                for (int i = 0; i < grid.GetLength(0); i++)
+                {
+                    for (int j = 0; j < grid.GetLength(1); j++)
+                    {
+                        newGrid[i, j] = (grid[i, j] + x + y - 1) % 9 + 1;
+                    }
+                }
+                grids.Add((x, y), newGrid);
+            }
+        }
+        var ogY = grid.GetLength(0);
+        var ogX = grid.GetLength(1);
+        var finalGrid = new int[ogY * 5, ogX * 5];
+        for (int y = 0; y < finalGrid.GetLength(0); y++)
+        {
+            for (int x = 0; x < finalGrid.GetLength(1); x++)
+            {
+                finalGrid[y, x] = grids[(y / ogY, x / ogX)][y % ogY, x % ogX];
+            }
+        }
+        return finalGrid;
+    }
 }
