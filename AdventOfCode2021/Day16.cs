@@ -19,14 +19,16 @@ public class Day16
         return result;
     }
 
-    public static long GetVersions(string packetHex){
+    public static long GetVersions(string packetHex)
+    {
         var transmission = ConvertToBinary(packetHex);
         var packet = new Packet(transmission);
 
         return GetVersions(packet);
     }
 
-    public static long GetVersions(Packet p){
+    public static long GetVersions(Packet p)
+    {
         return p.Version + p.SubPackets.Select(x => GetVersions(x)).Sum();
     }
     public static long Sol1()
@@ -37,7 +39,9 @@ public class Day16
     public static long Sol2()
     {
         var input = ReadInputFile("Inputs\\input16.txt");
-        return 0;
+        var transmission = ConvertToBinary(input);
+        var packet = new Packet(transmission);
+        return packet.GetValue();
     }
 }
 
@@ -64,9 +68,8 @@ public class Packet
     {
         Version = Convert.ToInt64(transmission[0..3], 2);
         TypeId = Convert.ToInt32(transmission[3..6], 2);
-        IsLiteralType = TypeId == 4;
         SubPackets = new List<Packet>();
-        if (IsLiteralType)
+        if (TypeId == 4)
         {
             SetLiteralValue(transmission);
         }
@@ -118,7 +121,9 @@ public class Packet
                     SubPackets.Add(packet);
                     subTransmission = subTransmission[packet.Transmission.Length..];
                 }
-            }else{
+            }
+            else
+            {
                 var subTransmission = transmission[(6 + 11 + 1)..];
                 for (int i = 0; i < NumberOfSubPackets; i++)
                 {
@@ -132,5 +137,30 @@ public class Packet
         }
     }
 
-   
+    public long GetValue()
+    {
+        switch (TypeId)
+        {
+            case 0:
+                return SubPackets.Sum(x => x.GetValue());
+            case 1:
+                long total = 1;
+                SubPackets.ForEach(x => total *= x.GetValue());
+                return total;
+            case 2:
+                return SubPackets.Min(x => x.GetValue());
+            case 3:
+                return SubPackets.Max(x => x.GetValue());
+            case 4:
+                return LiteralValue;
+            case 5:
+                return SubPackets[0].GetValue() > SubPackets[1].GetValue() ? 1 : 0;
+            case 6:
+                return SubPackets[0].GetValue() < SubPackets[1].GetValue() ? 1 : 0;
+            case 7:
+                return SubPackets[0].GetValue() == SubPackets[1].GetValue() ? 1 : 0;
+            default:
+                return 0;
+        }
+    }
 }
