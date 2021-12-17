@@ -21,17 +21,14 @@ public class Day17
     public static long Sol1()
     {
         var ranges = ReadInputFile("Inputs/input17.txt");
-        var speeds = GetValidStartingSpeeds(ranges.Item1, ranges.Item2);
+        var speeds = GetValidStartingSpeeds(ranges.Item1, ranges.Item2, 1000, 0);
         return speeds.Select(x => GetHighestPoint(x.Y)).Max();
     }
 
-    public static List<Point> GetValidStartingSpeeds((int Start, int End) xRange, (int Start, int End) yRange)
+    public static List<Point> GetValidStartingSpeeds((int Start, int End) xRange, (int Start, int End) yRange, int minY, int maxY)
     {
         var minX = CalculateMinXSpeed(xRange.Start);
-        var maxX = minX * 5;
-
-        var minY = 1000;
-        var maxY = 0;
+        var maxX = minX * 10;
 
         List<Point> validSpeeds = new List<Point>();
         for (int xSpeed = minX; xSpeed < maxX; xSpeed++)
@@ -63,7 +60,8 @@ public class Day17
 
     public static long Sol2()
     {
-        return 0;
+        var ranges = ReadInputFile("Inputs/input17.txt");
+        return GetValidStartingSpeeds(ranges.Item1, ranges.Item2, 1000, -1000).Count;
     }
 
     public static bool IsTrajectoryValid(Point startingSpeed, (int Start, int End) xRange, (int Start, int End) yRange)
