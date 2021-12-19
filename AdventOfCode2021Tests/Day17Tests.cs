@@ -44,12 +44,5 @@ namespace AdventOfCode2021Tests
             var min = Day17.CalculateMinXSpeed(xStart);
             Assert.Equal(expectedMin, min);
         }
-
-        [Theory]
-        
-        public void GetValidStartingSpeeds(int xRange1, int xRange2, int yRange1, int yRange2, int expectedCount){
-            var speeds = Day17.GetValidStartingSpeeds((xRange1,xRange2), (yRange1,yRange2));
-            Assert.Equal(expectedCount, speeds.Count);
-        }
     }
 }
