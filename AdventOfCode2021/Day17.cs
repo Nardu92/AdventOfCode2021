@@ -28,7 +28,7 @@ public class Day17
     public static List<Point> GetValidStartingSpeeds((int Start, int End) xRange, (int Start, int End) yRange, int minY, int maxY)
     {
         var minX = CalculateMinXSpeed(xRange.Start);
-        var maxX = minX * 10;
+        var maxX = xRange.End;
 
         List<Point> validSpeeds = new List<Point>();
         for (int xSpeed = minX; xSpeed < maxX; xSpeed++)
