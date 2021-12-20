@@ -6,7 +6,6 @@ public class Day17
     public static ((int Start, int End), (int Start, int End)) ReadInputFile(string filename)
     {
         using System.IO.StreamReader file = new System.IO.StreamReader(filename);
-        string line;
         string text = file.ReadLine()!;
 
         var regexX = new Regex(@"x=(?<xrange>.*\.\..*), y=(?<yrange>.*\.\..*)");

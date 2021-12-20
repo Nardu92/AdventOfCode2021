@@ -15,7 +15,7 @@ public class Day19
         {
             var beacons = new List<Point3D>();
             line = file.ReadLine();
-            var scannerId = Convert.ToInt32(line.Split(' ')[2]);
+            var scannerId = Convert.ToInt32(line!.Split(' ')[2]);
             var sameScanner = true;
             while (sameScanner)
             {
@@ -37,23 +37,6 @@ public class Day19
             scanners.Add(new Scanner(scannerId, beacons));
         } while (!eof);
         return scanners;
-    }
-
-    public static Scanner ReadScanner(System.IO.StreamReader file)
-    {
-        var beacons = new List<Point3D>();
-        var line = file.ReadLine();
-        var scannerId = Convert.ToInt32(line.Split(' ')[2]);
-        while (true)
-        {
-            line = file.ReadLine();
-            if (string.IsNullOrEmpty(line))
-            {
-                break;
-            }
-            var beaconPosition = new Point3D(line);
-        }
-        return new Scanner(scannerId, beacons);
     }
 
     public static long Sol1()

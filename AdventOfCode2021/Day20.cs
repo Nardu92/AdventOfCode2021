@@ -6,7 +6,7 @@ public class Day20
     {
         using var file = new System.IO.StreamReader(filename);
         var decoder = file.ReadLine()!;
-        string line ;
+        string? line ;
         file.ReadLine();
         var lines = new List<string>();        
         while ((line = file.ReadLine()) != null)

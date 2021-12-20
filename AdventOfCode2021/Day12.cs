@@ -78,12 +78,12 @@ public class Day12
             string[] nodesIds = line.Split('-');
             var nodeValueStart = nodesIds[0];
             var nodeValueEnd = nodesIds[1];
-            if (!nodes.TryGetValue(nodeValueStart, out Node nodeStart))
+            if (!nodes.TryGetValue(nodeValueStart, out Node? nodeStart))
             {
                 nodeStart = new Node(nodeValueStart);
                 nodes.Add(nodeValueStart, nodeStart);
             }
-            if (!nodes.TryGetValue(nodeValueEnd, out Node nodeEnd))
+            if (!nodes.TryGetValue(nodeValueEnd, out Node? nodeEnd))
             {
                 nodeEnd = new Node(nodeValueEnd);
                 nodes.Add(nodeValueEnd, nodeEnd);
