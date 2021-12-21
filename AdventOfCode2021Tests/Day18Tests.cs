@@ -97,6 +97,9 @@ namespace AdventOfCode2021Tests
             Assert.Equal(0, snailTree.Root.Right.Right.Right.Right.Value);
             Assert.Equal(8, snailTree.Root.Left.Right.Right.Left.Value);
             Assert.Equal(9, snailTree.Root.Right.Left.Value);
+            
+            var reduced = new SnailMath("[[3,[2,[8,0]]],[9,[5,[7,0]]]]");
+            Assert.Equal(reduced.ToString(), snailTree.ToString());
         }
 
         [Fact]
@@ -136,7 +139,7 @@ namespace AdventOfCode2021Tests
             var snailTree = new SnailTree("[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]");
             snailTree.Reduce();
             var reduced = new SnailTree("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            Assert.Equal(reduced.ToString(), snailTree.ToString());
         }
 
         [Fact]
@@ -169,7 +172,7 @@ namespace AdventOfCode2021Tests
             var snailTree = new SnailTree("[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]");
             snailTree.Add("[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]");
             var reduced = new SnailTree("[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            Assert.Equal(reduced.ToString(), snailTree.ToString());
 
             snailTree.Add("[[2,[[0,8],[3,4]]],[[[6,7],1],[7,[1,6]]]]");
             reduced = new SnailTree("[[[[6,7],[6,7]],[[7,7],[0,7]]],[[[8,7],[7,7]],[[8,8],[8,0]]]]");
@@ -211,6 +214,7 @@ namespace AdventOfCode2021Tests
         [InlineData("[[[[3,0],[5,3]],[4,4]],[5,5]]", 791)]
         [InlineData("[[[[5,0],[7,4]],[5,5]],[6,6]]", 1137)]
         [InlineData("[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]", 3488)]
+        [InlineData("[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]", 4140)]
         public void MagnitudeTest(string input, int expected)
         {
             var snailMath = new SnailMath(input);

@@ -32,7 +32,7 @@ public class SnailMath
 
     public int Depth => Parent?.Depth + 1 ?? 0;
 
-    public bool ToSplit => Value > 10;
+    public bool ToSplit => Value >= 10;
 
     public bool ToExplode => Depth > 4;
 
@@ -111,6 +111,18 @@ public class SnailMath
         else
         {
             return 3 * Left.GetMagnitude() + 2 * Right.GetMagnitude();
+        }
+    }
+
+    public override string ToString()
+    {
+        if (Left == null && Right == null)
+        {
+            return Value.ToString();
+        }
+        else
+        {
+            return $"[{Left},{Right}]";
         }
     }
 }
@@ -256,5 +268,10 @@ public class SnailTree
         Root = new SnailMath(Root, newNode);
         PopulateDictionaries();
         Reduce();
+    }
+
+    public override string ToString()
+    {
+        return Root.ToString();
     }
 }
