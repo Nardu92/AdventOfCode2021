@@ -50,56 +50,19 @@ namespace AdventOfCode2021Tests
             Assert.Equal(3, t.Right!.Right!.Right!.Right!.Value);
         }
 
-        [Fact]
-        public void SnailTreeExplodeTest()
-        {
-            var snailTree = new SnailTree("[[[[[9,8],1],2],3],4]");
-            snailTree.Explode(snailTree.Root.Left.Left.Left.Left);
-            Assert.Equal(0, snailTree.Root.Left.Left.Left.Left.Value);
-            Assert.Equal(9, snailTree.Root.Left.Left.Left.Right.Value);
-        }
 
-        [Fact]
-        public void SnailTreeExplodeTest2()
-        {
-            var snailTree = new SnailTree("[7,[6,[5,[4,[3,2]]]]]");
-            snailTree.Explode(snailTree.Root.Right.Right.Right.Right);
-            Assert.Equal(0, snailTree.Root.Right.Right.Right.Right.Value);
-            Assert.Equal(7, snailTree.Root.Right.Right.Right.Left.Value);
-        }
-
-        [Fact]
-        public void SnailTreeExplodeTest3()
-        {
-            var snailTree = new SnailTree("[[6,[5,[4,[3,2]]]],1]");
-            snailTree.Explode(snailTree.Root.Left.Right.Right.Right);
-            Assert.Equal(0, snailTree.Root.Left.Right.Right.Right.Value);
-            Assert.Equal(7, snailTree.Root.Left.Right.Right.Left.Value);
-            Assert.Equal(3, snailTree.Root.Right.Value);
-        }
-
-
-        [Fact]
-        public void SnailTreeExplodeTest4()
-        {
-            var snailTree = new SnailTree("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]");
-            snailTree.Explode(snailTree.Root.Left.Right.Right.Right);
-            Assert.Equal(0, snailTree.Root.Left.Right.Right.Right.Value);
-            Assert.Equal(8, snailTree.Root.Left.Right.Right.Left.Value);
-            Assert.Equal(9, snailTree.Root.Right.Left.Value);
-        }
-
-        [Fact]
-        public void SnailTreeExplodeTest5()
-        {
-            var snailTree = new SnailTree("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]");
-            snailTree.Explode(snailTree.Root.Right.Right.Right.Right);
-            Assert.Equal(0, snailTree.Root.Right.Right.Right.Right.Value);
-            Assert.Equal(8, snailTree.Root.Left.Right.Right.Left.Value);
-            Assert.Equal(9, snailTree.Root.Right.Left.Value);
-            
-            var reduced = new SnailMath("[[3,[2,[8,0]]],[9,[5,[7,0]]]]");
+        [Theory]
+        [InlineData("[[[[[9,8],1],2],3],4]", "[[[[0,9],2],3],4]")]
+        [InlineData("[7,[6,[5,[4,[3,2]]]]]","[7,[6,[5,[7,0]]]]")]
+        [InlineData("[[6,[5,[4,[3,2]]]],1]","[[6,[5,[7,0]]],3]")]
+        [InlineData("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]","[[3,[2,[8,0]]],[9,[5,[7,0]]]]")]
+        [InlineData("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]","[[3,[2,[8,0]]],[9,[5,[7,0]]]]")]
+        public void SnailTreeExplodeTest6(string input, string expected){
+            var snailTree = new SnailTree(input);
+            snailTree.Reduce();
+            var reduced = new SnailTree(expected);
             Assert.Equal(reduced.ToString(), snailTree.ToString());
+
         }
 
         [Fact]
@@ -107,7 +70,6 @@ namespace AdventOfCode2021Tests
         {
             var snailTree = new SnailTree("[[[[0,7],4],[15,[0,13]]],[1,1]]");
             snailTree.Split(snailTree.Root.Left.Right.Left);
-            //[[[[0,7],4],[[7,8],[0,13]]],[1,1]]
             Assert.Equal(7, snailTree.Root.Left.Right.Left.Left.Value);
             Assert.Equal(8, snailTree.Root.Left.Right.Left.Right.Value);
         }
