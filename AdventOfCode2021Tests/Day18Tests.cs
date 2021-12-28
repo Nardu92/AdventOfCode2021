@@ -59,6 +59,7 @@ namespace AdventOfCode2021Tests
         [InlineData("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]","[[3,[2,[8,0]]],[9,[5,[7,0]]]]")]
         [InlineData("[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]","[[[[0,7],4],[[7,8],[6,0]]],[8,1]]")]
         [InlineData("[[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]],[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]]", "[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]")]
+        [InlineData("[[[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]],[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]]","[[[[7,8],[6,6]],[[6,0],[7,7]]],[[[7,8],[8,8]],[[7,9],[0,6]]]]")]
         public void SnailTreeReduceTest(string input, string expected){
             var snailTree = new SnailTree(input);
             snailTree.Reduce();
@@ -163,13 +164,6 @@ namespace AdventOfCode2021Tests
             Assert.Equal(reduced, snailTree.ToString());
         }
 
-        [Theory]
-        [InlineData("input18e.txt", "[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]")]
-        public void SumAllTest(string inputFile, string expectedResult){
-            var inputs = Day18.ReadInputFile("Inputs\\" + inputFile);
-            var result = Day18.SumAllMath(inputs);
-            Assert.Equal(expectedResult, result.ToString());
-        }
 
         [Theory]
         [InlineData("[[1,2],[[3,4],5]]", 143)]
@@ -183,6 +177,23 @@ namespace AdventOfCode2021Tests
         {
             var snailMath = new SnailMath(input);
             Assert.Equal(expected, snailMath.GetMagnitude());
+        }
+
+        
+        [Theory]
+        [InlineData("input18e.txt", "[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]")]
+        public void SumAllTest(string inputFile, string expectedResult){
+            var inputs = Day18.ReadInputFile("Inputs\\" + inputFile);
+            var result = Day18.SumAllMath(inputs);
+            Assert.Equal(expectedResult, result.ToString());
+        }
+        
+        [Theory]
+        [InlineData("input18e.txt", 3993)]
+        public void FindMaxMagnitudeTest(string inputFile, long expectedResult){
+            var inputs = Day18.ReadInputFile("Inputs\\" + inputFile);
+            var result = Day18.FindHighestPair(inputs);
+            Assert.Equal(expectedResult, result);
         }
     }
 }

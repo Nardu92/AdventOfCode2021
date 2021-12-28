@@ -6,7 +6,6 @@ public class Day18
         return System.IO.File.ReadAllLines(filename);
     }
 
-
     public static long Sol1()
     {
         var inputs = Day18.ReadInputFile("Inputs\\input18.txt");
@@ -14,21 +13,46 @@ public class Day18
         return result.Root.GetMagnitude();
     }
 
-    public static SnailTree SumAllMath(string[] inputs){
+    public static long Sol2()
+    {
+        var inputs = Day18.ReadInputFile("Inputs\\input18.txt");
+        var result = Day18.FindHighestPair(inputs);
+        return result;
+    }
+
+    public static SnailTree SumAllMath(string[] inputs)
+    {
 
         var current = new SnailTree(inputs[0]);
         foreach (var input in inputs.Skip(1))
-        {   
+        {
             current.Add(input);
         }
         return current;
     }
 
-    public static long Sol2()
+    public static long FindHighestPair(string[] inputs)
     {
-        return 0;
+        long max = 0;
+        for (int i = 0; i < inputs.Length; i++)
+        {
+            foreach (var input in inputs)
+            {
+                if(inputs[i] == input)
+                {
+                    continue;
+                }
+                var current = new SnailTree(inputs[i]);
+                current.Add(input);
+                var magnitude = current.Root.GetMagnitude();
+                if (magnitude > max)
+                {
+                    max = magnitude;
+                }
+            }
+        }
+        return max;
     }
-
 }
 
 public class SnailMath
