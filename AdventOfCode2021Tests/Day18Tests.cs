@@ -57,7 +57,9 @@ namespace AdventOfCode2021Tests
         [InlineData("[[6,[5,[4,[3,2]]]],1]","[[6,[5,[7,0]]],3]")]
         [InlineData("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]","[[3,[2,[8,0]]],[9,[5,[7,0]]]]")]
         [InlineData("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]","[[3,[2,[8,0]]],[9,[5,[7,0]]]]")]
-        public void SnailTreeExplodeTest6(string input, string expected){
+        [InlineData("[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]","[[[[0,7],4],[[7,8],[6,0]]],[8,1]]")]
+        [InlineData("[[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]],[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]]", "[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]")]
+        public void SnailTreeReduceTest(string input, string expected){
             var snailTree = new SnailTree(input);
             snailTree.Reduce();
             var reduced = new SnailTree(expected);
@@ -96,15 +98,6 @@ namespace AdventOfCode2021Tests
         }
 
         [Fact]
-        public void ReduceTest()
-        {
-            var snailTree = new SnailTree("[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]");
-            snailTree.Reduce();
-            var reduced = new SnailTree("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]");
-            Assert.Equal(reduced.ToString(), snailTree.ToString());
-        }
-
-        [Fact]
         public void AddTest()
         {
             var snailTree = new SnailTree("[1,1]");
@@ -128,45 +121,54 @@ namespace AdventOfCode2021Tests
             Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
         }
 
+
         [Fact]
         public void AddTest3()
         {
             var snailTree = new SnailTree("[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]");
             snailTree.Add("[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]");
-            var reduced = new SnailTree("[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]");
-            Assert.Equal(reduced.ToString(), snailTree.ToString());
+            var reduced = "[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]";
+            Assert.Equal(reduced, snailTree.ToString());
 
             snailTree.Add("[[2,[[0,8],[3,4]]],[[[6,7],1],[7,[1,6]]]]");
-            reduced = new SnailTree("[[[[6,7],[6,7]],[[7,7],[0,7]]],[[[8,7],[7,7]],[[8,8],[8,0]]]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            reduced = "[[[[6,7],[6,7]],[[7,7],[0,7]]],[[[8,7],[7,7]],[[8,8],[8,0]]]]";
+            Assert.Equal(reduced, snailTree.ToString());
 
             snailTree.Add("[[[[2,4],7],[6,[0,5]]],[[[6,8],[2,8]],[[2,1],[4,5]]]]");
-            reduced = new SnailTree("[[[[7,0],[7,7]],[[7,7],[7,8]]],[[[7,7],[8,8]],[[7,7],[8,7]]]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            reduced = "[[[[7,0],[7,7]],[[7,7],[7,8]]],[[[7,7],[8,8]],[[7,7],[8,7]]]]";
+            Assert.Equal(reduced, snailTree.ToString());
 
             snailTree.Add("[7,[5,[[3,8],[1,4]]]]");
-            reduced = new SnailTree("[[[[7,7],[7,8]],[[9,5],[8,7]]],[[[6,8],[0,8]],[[9,9],[9,0]]]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            reduced = "[[[[7,7],[7,8]],[[9,5],[8,7]]],[[[6,8],[0,8]],[[9,9],[9,0]]]]";
+            Assert.Equal(reduced, snailTree.ToString());
 
             snailTree.Add("[[2,[2,2]],[8,[8,1]]]");
-            reduced = new SnailTree("[[[[6,6],[6,6]],[[6,0],[6,7]]],[[[7,7],[8,9]],[8,[8,1]]]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            reduced = "[[[[6,6],[6,6]],[[6,0],[6,7]]],[[[7,7],[8,9]],[8,[8,1]]]]";
+            Assert.Equal(reduced, snailTree.ToString());
 
             snailTree.Add("[2,9]");
-            reduced = new SnailTree("[[[[6,6],[7,7]],[[0,7],[7,7]]],[[[5,5],[5,6]],9]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            reduced = "[[[[6,6],[7,7]],[[0,7],[7,7]]],[[[5,5],[5,6]],9]]";
+            Assert.Equal(reduced, snailTree.ToString());
 
             snailTree.Add("[1,[[[9,3],9],[[9,0],[0,7]]]]");
-            reduced = new SnailTree("[[[[7,8],[6,7]],[[6,8],[0,8]]],[[[7,7],[5,0]],[[5,5],[5,6]]]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            reduced = "[[[[7,8],[6,7]],[[6,8],[0,8]]],[[[7,7],[5,0]],[[5,5],[5,6]]]]";
+            Assert.Equal(reduced, snailTree.ToString());
 
             snailTree.Add("[[[5,[7,4]],7],1]");
-            reduced = new SnailTree("[[[[7,7],[7,7]],[[8,7],[8,7]]],[[[7,0],[7,7]],9]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            reduced = "[[[[7,7],[7,7]],[[8,7],[8,7]]],[[[7,0],[7,7]],9]]";
+            Assert.Equal(reduced, snailTree.ToString());
 
             snailTree.Add("[[[[4,2],2],6],[8,7]]");
-            reduced = new SnailTree("[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]");
-            Assert.Equal(reduced.OrderedSnailMath.Select(x => x.Value), snailTree.OrderedSnailMath.Select(x => x.Value));
+            reduced = "[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]";
+            Assert.Equal(reduced, snailTree.ToString());
+        }
+
+        [Theory]
+        [InlineData("input18e.txt", "[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]")]
+        public void SumAllTest(string inputFile, string expectedResult){
+            var inputs = Day18.ReadInputFile("Inputs\\" + inputFile);
+            var result = Day18.SumAllMath(inputs);
+            Assert.Equal(expectedResult, result.ToString());
         }
 
         [Theory]

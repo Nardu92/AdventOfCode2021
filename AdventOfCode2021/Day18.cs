@@ -9,9 +9,20 @@ public class Day18
 
     public static long Sol1()
     {
-        return 0;
+        var inputs = Day18.ReadInputFile("Inputs\\input18.txt");
+        var result = Day18.SumAllMath(inputs);
+        return result.Root.GetMagnitude();
     }
 
+    public static SnailTree SumAllMath(string[] inputs){
+
+        var current = new SnailTree(inputs[0]);
+        foreach (var input in inputs.Skip(1))
+        {   
+            current.Add(input);
+        }
+        return current;
+    }
 
     public static long Sol2()
     {
@@ -221,13 +232,16 @@ public class SnailTree
     {
         foreach (var snailMath in OrderedSnailMath)
         {
+            if (snailMath.ToExplode)
+            {
+                return snailMath.Parent;
+            }
+        }
+        foreach (var snailMath in OrderedSnailMath)
+        {
             if (snailMath.ToSplit)
             {
                 return snailMath;
-            }
-            else if (snailMath.ToExplode)
-            {
-                return snailMath.Parent;
             }
         }
         return null;
